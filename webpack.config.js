@@ -1,5 +1,5 @@
 module.exports = {
-    entry: './src/boot.js',
+    entry: './src/boot.jsx',
     output: {
         path: 'public/js',
         filename: 'app.js'
