@@ -18,6 +18,7 @@ module.exports = {
         modulesDirectories: [
             'src',
             'src/features',
+            'src/services',
             'node_modules',
             'test',
             'shims'

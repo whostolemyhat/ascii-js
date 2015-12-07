@@ -1,0 +1,14 @@
+.upload {
+  background: grey;
+  border-radius: 5px;
+  width: 50%;
+  min-height: 200px; }
+  .upload--has-file {
+    background: antiquewhite; }
+  .upload--drag-enter {
+    background: aliceblue; }
+  .upload input {
+    display: none; }
+
+.preview {
+  width: 100%; }

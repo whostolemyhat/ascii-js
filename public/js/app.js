@@ -19669,6 +19669,14 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _classnames = __webpack_require__(160);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _asciiConverter = __webpack_require__(161);
+
+	var _asciiConverter2 = _interopRequireDefault(_asciiConverter);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19682,19 +19690,37 @@
 	var UploadForm = (function (_React$Component) {
 	    _inherits(UploadForm, _React$Component);
 
-	    function UploadForm() {
+	    function UploadForm(props) {
 	        _classCallCheck(this, UploadForm);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(UploadForm).apply(this, arguments));
+	        // bind events - `this` in onClick is `e`
+	        // this.onClick = this.onClick.bind(this);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(UploadForm).call(this, props));
+
+	        _this.onDragEnter = _this.onDragEnter.bind(_this);
+	        _this.onDragLeave = _this.onDragLeave.bind(_this);
+	        _this.onDragOver = _this.onDragOver.bind(_this);
+	        _this.onDrop = _this.onDrop.bind(_this);
+
+	        _this.state = {
+	            preview: null,
+	            dragEnter: false,
+	            allowedTypes: ['image/jpeg', 'image/jpg', 'image/png']
+	        };
+
+	        console.log(_this);
+	        return _this;
 	    }
+
+	    // need to implement all the drag handlers otherwise the browser defaults take over
 
 	    _createClass(UploadForm, [{
 	        key: 'onDragEnter',
-
-	        // need to implement all the drag handlers otherwise the browser defaults take over
 	        value: function onDragEnter(e) {
 	            e.preventDefault();
 	            console.log('enter');
+	            this.setState({ dragEnter: true });
 	        }
 	    }, {
 	        key: 'onDragOver',
@@ -19709,28 +19735,68 @@
 	    }, {
 	        key: 'onDrop',
 	        value: function onDrop(e) {
+	            var _this2 = this;
+
 	            e.preventDefault();
+	            this.setState({ dragEnter: false });
 
 	            console.log('file dropped');
 	            var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
 	            console.log(files);
+
+	            // check only one
+	            var file = files[0];
+
 	            // TODO: check file size and type
-	            // TODO: check only one
-	            // TODO: kick off conversion
-	            // test
+	            if (this.state.allowedTypes.indexOf(file.type) > -1) {
+	                (function () {
+	                    _this2.setState({ preview: window.URL.createObjectURL(file) });
+
+	                    // TODO: kick off conversion
+	                    var canvas = document.getElementById('photo');
+	                    var image = new Image();
+
+	                    // note case!
+	                    image.onload = function () {
+	                        // resize canvas to image
+	                        canvas.width = image.width;
+	                        canvas.height = image.height;
+	                        var context = canvas.getContext('2d');
+	                        context.drawImage(this, 0, 0);
+	                        // console.log('data', context.getImageData(0, 0, canvas.height, canvas.width));
+	                        document.getElementById('output').innerText = (0, _asciiConverter2.default)(context.getImageData(0, 0, canvas.height, canvas.width));
+	                    };
+
+	                    image.src = window.URL.createObjectURL(file);
+	                })();
+	            }
+	        }
+	    }, {
+	        key: 'renderPreview',
+	        value: function renderPreview() {
+	            if (this.state.preview) {
+	                return _react2.default.createElement('img', { className: 'preview', src: this.state.preview });
+	            }
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var classes = (0, _classnames2.default)({
+	                'upload': true,
+	                'upload--drag-enter': this.state.dragEnter,
+	                'upload--has-file': this.state.preview
+	            });
+
 	            return _react2.default.createElement(
 	                'div',
 	                {
-	                    style: { border: "1px solid black" },
+	                    className: classes,
 	                    onDrop: this.onDrop,
 	                    onDragEnter: this.onDragEnter,
 	                    onDragOver: this.onDragOver,
 	                    onDragLeave: this.onDragLeave },
 	                this.props.children,
+	                this.renderPreview(),
 	                _react2.default.createElement('input', { type: 'file',
 	                    ref: 'fileUpload',
 	                    onChange: this.onDrop })
@@ -19742,6 +19808,105 @@
 	})(_react2.default.Component);
 
 	exports.default = UploadForm;
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2015 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+		'use strict';
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames () {
+			var classes = '';
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if (argType === 'string' || argType === 'number') {
+					classes += ' ' + arg;
+				} else if (Array.isArray(arg)) {
+					classes += ' ' + classNames.apply(null, arg);
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes += ' ' + key;
+						}
+					}
+				}
+			}
+
+			return classes.substr(1);
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ },
+/* 161 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = toAscii;
+	var charMap = [".", ",", ":", ";", "o", "x", "%", "#", "@"];
+
+	function pixelToChar(pixel, mapLength) {
+	    var averageShade = Math.floor(pixel.r * 0.3 + pixel.b * 0.3 + pixel.g * 0.3);
+	    return Math.floor((255 - averageShade) * (mapLength / 256));
+	}
+
+	function toAscii(pixels) {
+	    // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas
+	    // context = canvas instance with image loaded
+	    console.log('toAscii', pixels);
+	    // data array is flattened rgba; ie each pixel is 4 elements in array
+	    var PIXEL_LENGTH = 4;
+	    var imgWidth = pixels.width * PIXEL_LENGTH;
+	    var data = pixels.data;
+	    var dataLength = data.length;
+	    var out = '';
+
+	    for (var i = 0; i < dataLength; i += PIXEL_LENGTH) {
+	        var pixel = {};
+	        pixel.r = data[i];
+	        pixel.g = data[i + 1];
+	        pixel.b = data[i + 2];
+	        pixel.a = data[i + 3];
+
+	        var char = charMap[pixelToChar(pixel, charMap.length)];
+	        out += char;
+	        if (i % imgWidth === 0) {
+	            out += '\r\n';
+	        }
+	    }
+
+	    return out;
+	}
 
 /***/ }
 /******/ ]);

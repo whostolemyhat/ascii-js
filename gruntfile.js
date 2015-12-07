@@ -3,9 +3,10 @@
 module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
     var webpackConfig = require('./webpack.config');
-    var app = __dirname + '/public';
 
     grunt.initConfig({
+        app: __dirname + '/public',
+
         webpack: {
             options: webpackConfig,
 
@@ -19,31 +20,20 @@ module.exports = function(grunt) {
         },
 
         sass: {
-            dev: {
-                options: {
-                    style: 'expanded',
-                    lineNumbers: true
-                },
-                files: {
-                    '<%= app %>/css/main.css': '<%= app %>/sass/main.scss',
-                    '<%= app %>/css/fonts.css': '<%= app %>/sass/fonts.scss'
-                }
-            },
             prod: {
                 options: {
                     style: 'compressed',
                     lineNumbers: false
                 },
                 files: {
-                    '<%= app %>/build/css/main.css': '<%= app %>/sass/main.scss',
-                    '<%= app %>/css/fonts.css': '<%= app %>/sass/fonts.scss'
+                    '<%= app %>/css/main.css': 'sass/main.scss'
                 }
             }
         },
 
         eslint: {
-            all: [
-                'src/**/*.*'
+            target: [
+                'src/**/*'
             ]
         },
 
@@ -53,11 +43,11 @@ module.exports = function(grunt) {
                 livereload: true
             },
 
-            watchsass: {
+            css: {
                 files: [
-                    '<%= app %>/sass/**/*.scss',
+                    'sass/**/*'
                 ],
-                tasks: ['sass:dev']
+                tasks: ['sass']
             },
 
             js: {
@@ -82,5 +72,5 @@ module.exports = function(grunt) {
         },
     });
 
-    grunt.registerTask('default', ['webpack', 'watch']);
+    grunt.registerTask('default', ['sass', 'eslint', 'webpack', 'watch']);
 };
