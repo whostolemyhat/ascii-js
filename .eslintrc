@@ -1,0 +1,14 @@
+{
+    // http://eslint.org/docs/rules/
+
+     "ecmaFeatures": {
+        "jsx": true,
+        "modules": true
+     },
+
+     "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+     }
+}

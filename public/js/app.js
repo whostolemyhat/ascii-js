@@ -19714,17 +19714,14 @@
 	            console.log('file dropped');
 	            var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
 	            console.log(files);
+	            // TODO: check file size and type
+	            // TODO: check only one
+	            // TODO: kick off conversion
+	            // test
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            // return (
-	            //     <form action="" onSubmit={ this.handleSubmit }>
-	            //         <input type="file" name="" id="" />
-	            //         <input type="submit" value="Do it do it do it do it come on do it do it do it press me now" />
-	            //     </form>
-	            // );
-
 	            return _react2.default.createElement(
 	                'div',
 	                {

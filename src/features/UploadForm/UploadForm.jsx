@@ -23,16 +23,13 @@ export default class UploadForm extends React.Component {
         console.log('file dropped');
         const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
         console.log(files);
+        // TODO: check file size and type
+        // TODO: check only one
+        // TODO: kick off conversion
+        // test
     }
 
     render() {
-        // return (
-        //     <form action="" onSubmit={ this.handleSubmit }>
-        //         <input type="file" name="" id="" />
-        //         <input type="submit" value="Do it do it do it do it come on do it do it do it press me now" />
-        //     </form>
-        // );
-
         return (
             <div
                 style={{ border: "1px solid black" }}

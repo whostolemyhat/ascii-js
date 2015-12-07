@@ -1,9 +1,4 @@
 module.exports = {
-    entry: './src/boot.jsx',
-    output: {
-        path: 'public/js',
-        filename: 'app.js'
-    },
     cache: true,
 
     module: {
@@ -31,8 +26,6 @@ module.exports = {
     },
 
     stats: {
-        colors: true,
-        modules: true,
-        reasons: true
+        colors: true
     }
 };
