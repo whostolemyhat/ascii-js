@@ -16,6 +16,14 @@ module.exports = function(grunt) {
                     path: __dirname + '/public/js',
                     filename: 'app.js'
                 }
+            },
+
+            worker: {
+                entry: __dirname + '/src/services/asciiWorker.js',
+                output: {
+                    path: __dirname + '/public/js',
+                    filename: 'asciiWorker.js'
+                }
             }
         },
 
@@ -54,15 +62,7 @@ module.exports = function(grunt) {
                 files: [
                     'src/**/*.*'
                 ],
-                tasks: ['eslint', 'copy', 'webpack']
-            }
-        },
-
-        copy: {
-            worker: {
-                files: [
-                    { src: 'src/services/asciiWorker.js', dest: 'public/js/asciiWorker.js' }
-                ]
+                tasks: ['eslint', 'webpack']
             }
         },
 
@@ -80,5 +80,5 @@ module.exports = function(grunt) {
         },
     });
 
-    grunt.registerTask('default', ['sass', 'eslint', 'copy', 'webpack', 'watch']);
+    grunt.registerTask('default', ['sass', 'eslint', 'webpack', 'watch']);
 };

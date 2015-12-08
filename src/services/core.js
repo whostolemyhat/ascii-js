@@ -1,8 +1,21 @@
 import AsciiConverter from 'asciiConverter';
+import EventEmitter from 'eventemitter3';
 
-class Core {
+class Core extends EventEmitter {
     constructor() {
+        super();
+        
         this.ascii = new AsciiConverter();
+        this.img = '';
+    }
+
+    getImage() {
+        return this.img;
+    }
+
+    setImage(src) {
+        this.img = src;
+        this.emit('imageChanged', this.img);
     }
 }
 

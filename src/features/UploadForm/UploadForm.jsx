@@ -10,13 +10,10 @@ export default class UploadForm extends React.Component {
         super(props);
 
         // bind events - `this` in onClick is `e`
-        // this.onClick = this.onClick.bind(this);
         this.onDragEnter = this.onDragEnter.bind(this);
         this.onDragLeave = this.onDragLeave.bind(this);
         this.onDragOver = this.onDragOver.bind(this);
         this.onDrop = this.onDrop.bind(this);
-
-        this.image;
 
         this.state = {
             preview: null,
@@ -28,7 +25,7 @@ export default class UploadForm extends React.Component {
             ]
         };
 
-        console.log(this);
+        this.image = null;
     }
 
     // need to implement all the drag handlers otherwise the browser defaults take over
@@ -66,6 +63,7 @@ export default class UploadForm extends React.Component {
             // note case!
             this.image.onload = () => { this.renderImage(canvas, this.image) };
             this.image.src =  window.URL.createObjectURL(file);
+            core.setImage(this.image.src);
         }
     }
 
@@ -73,18 +71,10 @@ export default class UploadForm extends React.Component {
         // resize canvas to image
         canvas.width = image.width;
         canvas.height = image.height;
-        let context = canvas.getContext('2d');
+        const context = canvas.getContext('2d');
         context.drawImage(image, 0, 0);
 
-        document.getElementById('output').innerText = core.ascii.toAscii(context.getImageData(0, 0, canvas.height, canvas.width));
-    }
-
-    renderPreview() {
-        if(this.state.preview) {
-            return (
-                <img className="preview" src={ this.state.preview } />
-            );
-        }
+        core.ascii.toAscii(context.getImageData(0, 0, canvas.height, canvas.width));
     }
 
     render() {
@@ -103,7 +93,6 @@ export default class UploadForm extends React.Component {
                 onDragLeave={ this.onDragLeave }>
 
                 { this.props.children }
-                { this.renderPreview() }
 
                 <input type="file"
                     ref="fileUpload"
