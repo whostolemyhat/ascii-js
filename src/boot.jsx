@@ -1,5 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import UploadForm from 'UploadForm/UploadForm';
+import AsciiApp from 'AsciiApp/AsciiApp';
 
-ReactDOM.render(<UploadForm>Drop an image here</UploadForm>, document.getElementById('hello'));
+// TODO: check
+// web workers
+// canvas
+// URL.createObjectURL
+
+ReactDOM.render(<AsciiApp />, document.getElementById('hello'));

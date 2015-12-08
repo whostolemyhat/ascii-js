@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
-import Ascii from 'ascii-converter';
+// import Ascii from 'ascii-converter';
+import core from 'core';
 
 // mostly nicked from https://github.com/paramaggarwal/react-dropzone/blob/master/index.js
 
@@ -16,9 +17,6 @@ export default class UploadForm extends React.Component {
         this.onDrop = this.onDrop.bind(this);
 
         this.image;
-        this.ascii = new Ascii();
-
-        this.ascii.on('progress', this.updateProgress);
 
         this.state = {
             preview: null,
@@ -36,7 +34,6 @@ export default class UploadForm extends React.Component {
     // need to implement all the drag handlers otherwise the browser defaults take over
     onDragEnter(e) {
         e.preventDefault();
-        console.log('enter');
         this.setState({ dragEnter: true });
     }
 
@@ -52,7 +49,6 @@ export default class UploadForm extends React.Component {
         e.preventDefault();
         this.setState({ dragEnter: false });
 
-        console.log('file dropped');
         const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
         console.log(files);
 
@@ -73,19 +69,14 @@ export default class UploadForm extends React.Component {
         }
     }
 
-    updateProgress(percent) {
-        console.log(`${ percent }%`);
-    }
-
     renderImage(canvas, image) {
-        console.log(image);
         // resize canvas to image
         canvas.width = image.width;
         canvas.height = image.height;
         let context = canvas.getContext('2d');
         context.drawImage(image, 0, 0);
-        // console.log('data', context.getImageData(0, 0, canvas.height, canvas.width));
-        document.getElementById('output').innerText = this.ascii.toAscii(context.getImageData(0, 0, canvas.height, canvas.width));
+
+        document.getElementById('output').innerText = core.ascii.toAscii(context.getImageData(0, 0, canvas.height, canvas.width));
     }
 
     renderPreview() {

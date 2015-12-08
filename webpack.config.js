@@ -5,7 +5,7 @@ module.exports = {
         loaders: [
             {
                 test: /\.jsx?$/,
-                exclude: /node_modules/,
+                exclude: [/node_modules/, 'asciiWorker.js'],
                 loader: 'babel',
                 query: {
                     presets: ['es2015', 'react']

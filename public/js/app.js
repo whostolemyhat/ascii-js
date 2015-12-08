@@ -54,17 +54,18 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _UploadForm = __webpack_require__(159);
+	var _AsciiApp = __webpack_require__(159);
 
-	var _UploadForm2 = _interopRequireDefault(_UploadForm);
+	var _AsciiApp2 = _interopRequireDefault(_AsciiApp);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	_reactDom2.default.render(_react2.default.createElement(
-	  _UploadForm2.default,
-	  null,
-	  'Drop an image here'
-	), document.getElementById('hello'));
+	// TODO: check
+	// web workers
+	// canvas
+	// URL.createObjectURL
+
+	_reactDom2.default.render(_react2.default.createElement(_AsciiApp2.default, null), document.getElementById('hello'));
 
 /***/ },
 /* 1 */
@@ -19669,13 +19670,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(160);
+	var _UploadForm = __webpack_require__(160);
 
-	var _classnames2 = _interopRequireDefault(_classnames);
+	var _UploadForm2 = _interopRequireDefault(_UploadForm);
 
-	var _asciiConverter = __webpack_require__(161);
+	var _Progress = __webpack_require__(165);
 
-	var _asciiConverter2 = _interopRequireDefault(_asciiConverter);
+	var _Progress2 = _interopRequireDefault(_Progress);
+
+	var _Result = __webpack_require__(166);
+
+	var _Result2 = _interopRequireDefault(_Result);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19684,6 +19689,70 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AsciiApp = (function (_React$Component) {
+	    _inherits(AsciiApp, _React$Component);
+
+	    function AsciiApp() {
+	        _classCallCheck(this, AsciiApp);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(AsciiApp).apply(this, arguments));
+	    }
+
+	    _createClass(AsciiApp, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'main',
+	                { role: 'main' },
+	                _react2.default.createElement(
+	                    _UploadForm2.default,
+	                    null,
+	                    'Drop an image here'
+	                ),
+	                _react2.default.createElement(_Progress2.default, null),
+	                _react2.default.createElement(_Result2.default, null)
+	            );
+	        }
+	    }]);
+
+	    return AsciiApp;
+	})(_react2.default.Component);
+
+	exports.default = AsciiApp;
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(161);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _core = __webpack_require__(162);
+
+	var _core2 = _interopRequireDefault(_core);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	// import Ascii from 'ascii-converter';
 
 	// mostly nicked from https://github.com/paramaggarwal/react-dropzone/blob/master/index.js
 
@@ -19704,9 +19773,6 @@
 	        _this.onDrop = _this.onDrop.bind(_this);
 
 	        _this.image;
-	        _this.ascii = new _asciiConverter2.default();
-
-	        _this.ascii.on('progress', _this.updateProgress);
 
 	        _this.state = {
 	            preview: null,
@@ -19724,7 +19790,6 @@
 	        key: 'onDragEnter',
 	        value: function onDragEnter(e) {
 	            e.preventDefault();
-	            console.log('enter');
 	            this.setState({ dragEnter: true });
 	        }
 	    }, {
@@ -19745,7 +19810,6 @@
 	            e.preventDefault();
 	            this.setState({ dragEnter: false });
 
-	            console.log('file dropped');
 	            var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
 	            console.log(files);
 
@@ -19770,21 +19834,15 @@
 	            }
 	        }
 	    }, {
-	        key: 'updateProgress',
-	        value: function updateProgress(percent) {
-	            console.log(percent + '%');
-	        }
-	    }, {
 	        key: 'renderImage',
 	        value: function renderImage(canvas, image) {
-	            console.log(image);
 	            // resize canvas to image
 	            canvas.width = image.width;
 	            canvas.height = image.height;
 	            var context = canvas.getContext('2d');
 	            context.drawImage(image, 0, 0);
-	            // console.log('data', context.getImageData(0, 0, canvas.height, canvas.width));
-	            document.getElementById('output').innerText = this.ascii.toAscii(context.getImageData(0, 0, canvas.height, canvas.width));
+
+	            document.getElementById('output').innerText = _core2.default.ascii.toAscii(context.getImageData(0, 0, canvas.height, canvas.width));
 	        }
 	    }, {
 	        key: 'renderPreview',
@@ -19825,7 +19883,7 @@
 	exports.default = UploadForm;
 
 /***/ },
-/* 160 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -19879,7 +19937,33 @@
 
 
 /***/ },
-/* 161 */
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _asciiConverter = __webpack_require__(163);
+
+	var _asciiConverter2 = _interopRequireDefault(_asciiConverter);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Core = function Core() {
+	    _classCallCheck(this, Core);
+
+	    this.ascii = new _asciiConverter2.default();
+	};
+
+	exports.default = new Core();
+
+/***/ },
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -19890,7 +19974,7 @@
 	    value: true
 	});
 
-	var _eventemitter = __webpack_require__(162);
+	var _eventemitter = __webpack_require__(164);
 
 	var _eventemitter2 = _interopRequireDefault(_eventemitter);
 
@@ -19902,19 +19986,19 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Ascii = (function (_EventEmitter) {
-	    _inherits(Ascii, _EventEmitter);
+	var AsciiConverter = (function (_EventEmitter) {
+	    _inherits(AsciiConverter, _EventEmitter);
 
-	    function Ascii() {
-	        _classCallCheck(this, Ascii);
+	    function AsciiConverter() {
+	        _classCallCheck(this, AsciiConverter);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Ascii).call(this));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AsciiConverter).call(this));
 
 	        _this.charMap = [".", ",", ":", ";", "o", "x", "%", "#", "@"];
 	        return _this;
 	    }
 
-	    _createClass(Ascii, [{
+	    _createClass(AsciiConverter, [{
 	        key: "pixelToChar",
 	        value: function pixelToChar(pixel, mapLength) {
 	            var averageShade = Math.floor(pixel.r * 0.3 + pixel.b * 0.3 + pixel.g * 0.3);
@@ -19923,45 +20007,63 @@
 	    }, {
 	        key: "toAscii",
 	        value: function toAscii(pixels) {
+	            var _this2 = this;
+
 	            console.log('toAscii', pixels);
 
-	            // data array is flattened rgba; ie each pixel is 4 elements in array
-	            var PIXEL_LENGTH = 4;
-	            var imgWidth = pixels.width * PIXEL_LENGTH;
-	            var rowPercent = 100 / pixels.height;
-	            var rowCount = 0;
-	            var data = pixels.data;
-	            var dataLength = data.length;
-	            var out = '';
+	            var worker = new Worker('/js/asciiWorker.js');
 
-	            for (var i = 0; i < dataLength; i += PIXEL_LENGTH) {
-	                var pixel = {};
-	                pixel.r = data[i];
-	                pixel.g = data[i + 1];
-	                pixel.b = data[i + 2];
-	                pixel.a = data[i + 3];
+	            worker.postMessage([pixels]);
+	            worker.onmessage = function (e) {
+	                console.log('Message from worker');
+	                console.log(e);
 
-	                var char = this.charMap[this.pixelToChar(pixel, this.charMap.length)];
-	                out += char;
-
-	                if (i % imgWidth === 0 && i > 0) {
-	                    out += '\r\n';
-	                    this.emit('progress', rowCount * rowPercent);
-	                    rowCount++;
+	                if (e.data.type === 'progress') {
+	                    _this2.emit('progress', e.data.value);
 	                }
-	            }
 
-	            return out;
+	                if (e.data.type === 'result') {
+	                    _this2.emit('result', e.data.value);
+	                }
+	            };
+
+	            // data array is flattened rgba; ie each pixel is 4 elements in array
+	            // const PIXEL_LENGTH = 4;
+	            // const imgWidth = pixels.width * PIXEL_LENGTH;
+	            // const rowPercent = 100 / pixels.height;
+	            // let rowCount = 0;
+	            // const data = pixels.data;
+	            // const dataLength = data.length;
+	            // let out = '';
+
+	            // for(let i = 0; i < dataLength; i += PIXEL_LENGTH) {
+	            //     let pixel = {};
+	            //     pixel.r = data[i];
+	            //     pixel.g = data[i + 1];
+	            //     pixel.b = data[i + 2];
+	            //     pixel.a = data[i + 3];
+
+	            //     let char = this.charMap[ this.pixelToChar(pixel, this.charMap.length) ];
+	            //     out += char;
+
+	            //     if(i % imgWidth === 0 && i > 0) {
+	            //         out += '\r\n';
+	            //         this.emit('progress', rowCount * rowPercent);
+	            //         rowCount++;
+	            //     }
+	            // }
+
+	            // return out;
 	        }
 	    }]);
 
-	    return Ascii;
+	    return AsciiConverter;
 	})(_eventemitter2.default);
 
-	exports.default = Ascii;
+	exports.default = AsciiConverter;
 
 /***/ },
-/* 162 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20227,6 +20329,130 @@
 	  module.exports = EventEmitter;
 	}
 
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _core = __webpack_require__(162);
+
+	var _core2 = _interopRequireDefault(_core);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Progress = (function (_React$Component) {
+	    _inherits(Progress, _React$Component);
+
+	    function Progress() {
+	        _classCallCheck(this, Progress);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Progress).call(this));
+
+	        _this.state = {
+	            progress: 0
+	        };
+
+	        _core2.default.ascii.on('progress', _this.updateProgress.bind(_this));
+	        _core2.default.ascii.on('result', _this.showResult.bind(_this));
+	        return _this;
+	    }
+
+	    _createClass(Progress, [{
+	        key: 'updateProgress',
+	        value: function updateProgress(progress) {
+	            console.log(progress + '%');
+	            this.setState({ progress: progress });
+	        }
+	    }, {
+	        key: 'showResult',
+	        value: function showResult(result) {
+	            document.getElementById('output').innerText = result;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            console.log('rendering progress');
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement('img', null),
+	                _react2.default.createElement('progress', { value: this.state.progress, max: '100' }),
+	                'Progress'
+	            );
+	        }
+	    }]);
+
+	    return Progress;
+	})(_react2.default.Component);
+
+	exports.default = Progress;
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Result = (function (_React$Component) {
+	    _inherits(Result, _React$Component);
+
+	    function Result() {
+	        _classCallCheck(this, Result);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Result).apply(this, arguments));
+	    }
+
+	    _createClass(Result, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                'Result'
+	            );
+	        }
+	    }]);
+
+	    return Result;
+	})(_react2.default.Component);
+
+	exports.default = Result;
 
 /***/ }
 /******/ ]);

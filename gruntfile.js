@@ -54,7 +54,15 @@ module.exports = function(grunt) {
                 files: [
                     'src/**/*.*'
                 ],
-                tasks: ['eslint', 'webpack']
+                tasks: ['eslint', 'copy', 'webpack']
+            }
+        },
+
+        copy: {
+            worker: {
+                files: [
+                    { src: 'src/services/asciiWorker.js', dest: 'public/js/asciiWorker.js' }
+                ]
             }
         },
 
@@ -72,5 +80,5 @@ module.exports = function(grunt) {
         },
     });
 
-    grunt.registerTask('default', ['sass', 'eslint', 'webpack', 'watch']);
+    grunt.registerTask('default', ['sass', 'eslint', 'copy', 'webpack', 'watch']);
 };
