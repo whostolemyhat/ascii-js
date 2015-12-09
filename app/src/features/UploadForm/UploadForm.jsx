@@ -1,15 +1,14 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import classnames from 'classnames';
-// import Ascii from 'ascii-converter';
 import core from 'core';
-
-// mostly nicked from https://github.com/paramaggarwal/react-dropzone/blob/master/index.js
 
 export default class UploadForm extends React.Component {
     constructor(props) {
         super(props);
 
         // bind events - `this` in onClick is `e`
+        this.onClick = this.onClick.bind(this);
         this.onDragEnter = this.onDragEnter.bind(this);
         this.onDragLeave = this.onDragLeave.bind(this);
         this.onDragOver = this.onDragOver.bind(this);
@@ -29,6 +28,13 @@ export default class UploadForm extends React.Component {
     }
 
     // need to implement all the drag handlers otherwise the browser defaults take over
+    onClick() {
+        // use file upload
+        const input = this.refs.input;
+        input.value = null;
+        input.click();
+    }
+
     onDragEnter(e) {
         e.preventDefault();
         this.setState({ dragEnter: true });
@@ -52,12 +58,10 @@ export default class UploadForm extends React.Component {
         // check only one
         let file = files[0];
 
-        // TODO: check file size and type
         if(this.state.allowedTypes.indexOf(file.type) > -1) {
             this.setState({ preview: window.URL.createObjectURL(file) });
             
-            // TODO: kick off conversion
-            const canvas = document.getElementById('photo');
+            const canvas = ReactDOM.findDOMNode(this.refs.photo);
             this.image = new Image();
 
             // note case!
@@ -87,6 +91,7 @@ export default class UploadForm extends React.Component {
         return (
             <div
                 className={ classes }
+                onClick={ this.onClick }
                 onDrop={ this.onDrop }
                 onDragEnter={ this.onDragEnter }
                 onDragOver={ this.onDragOver }
@@ -94,9 +99,8 @@ export default class UploadForm extends React.Component {
 
                 { this.props.children }
 
-                <input type="file"
-                    ref="fileUpload"
-                    onChange={ this.onDrop } />
+                <input type="file" ref="input" onChange={ this.onDrop } />
+                <canvas ref="photo"></canvas>
             </div>
         ); 
     };

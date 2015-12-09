@@ -17,7 +17,7 @@ export default class Progress extends React.Component {
 
     updateImg(src) {
         this.setState({ img: src });
-        renderPreview();
+        this.renderPreview();
     }
 
     renderPreview() {
@@ -29,15 +29,20 @@ export default class Progress extends React.Component {
     }
 
     updateProgress(progress) {
-        console.log(`${ progress }%`);
         this.setState({ progress: progress });
+    }
+
+    renderProgress() {
+        if(this.state.progress) {
+            return <progress className="progress__bar" value={ this.state.progress } max="100" />    
+        }
     }
 
     render() {
         return (
-            <div>
+            <div className="progress">
                 { this.renderPreview() }
-                <progress value={ this.state.progress } max="100" />
+                { this.renderProgress() }
             </div>
         );
     };

@@ -19703,8 +19703,8 @@
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
-	                'main',
-	                { role: 'main' },
+	                'div',
+	                null,
 	                _react2.default.createElement(
 	                    _UploadForm2.default,
 	                    null,
@@ -19737,6 +19737,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactDom = __webpack_require__(158);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
 	var _classnames = __webpack_require__(161);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
@@ -19752,9 +19756,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	// import Ascii from 'ascii-converter';
-
-	// mostly nicked from https://github.com/paramaggarwal/react-dropzone/blob/master/index.js
 
 	var UploadForm = (function (_React$Component) {
 	    _inherits(UploadForm, _React$Component);
@@ -19766,6 +19767,7 @@
 
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(UploadForm).call(this, props));
 
+	        _this.onClick = _this.onClick.bind(_this);
 	        _this.onDragEnter = _this.onDragEnter.bind(_this);
 	        _this.onDragLeave = _this.onDragLeave.bind(_this);
 	        _this.onDragOver = _this.onDragOver.bind(_this);
@@ -19784,6 +19786,14 @@
 	    // need to implement all the drag handlers otherwise the browser defaults take over
 
 	    _createClass(UploadForm, [{
+	        key: 'onClick',
+	        value: function onClick() {
+	            // use file upload
+	            var input = this.refs.input;
+	            input.value = null;
+	            input.click();
+	        }
+	    }, {
 	        key: 'onDragEnter',
 	        value: function onDragEnter(e) {
 	            e.preventDefault();
@@ -19813,13 +19823,11 @@
 	            // check only one
 	            var file = files[0];
 
-	            // TODO: check file size and type
 	            if (this.state.allowedTypes.indexOf(file.type) > -1) {
 	                (function () {
 	                    _this2.setState({ preview: window.URL.createObjectURL(file) });
 
-	                    // TODO: kick off conversion
-	                    var canvas = document.getElementById('photo');
+	                    var canvas = _reactDom2.default.findDOMNode(_this2.refs.photo);
 	                    _this2.image = new Image();
 
 	                    // note case!
@@ -19855,14 +19863,14 @@
 	                'div',
 	                {
 	                    className: classes,
+	                    onClick: this.onClick,
 	                    onDrop: this.onDrop,
 	                    onDragEnter: this.onDragEnter,
 	                    onDragOver: this.onDragOver,
 	                    onDragLeave: this.onDragLeave },
 	                this.props.children,
-	                _react2.default.createElement('input', { type: 'file',
-	                    ref: 'fileUpload',
-	                    onChange: this.onDrop })
+	                _react2.default.createElement('input', { type: 'file', ref: 'input', onChange: this.onDrop }),
+	                _react2.default.createElement('canvas', { ref: 'photo' })
 	            );
 	        }
 	    }]);
@@ -20374,7 +20382,7 @@
 	        key: 'updateImg',
 	        value: function updateImg(src) {
 	            this.setState({ img: src });
-	            renderPreview();
+	            this.renderPreview();
 	        }
 	    }, {
 	        key: 'renderPreview',
@@ -20386,17 +20394,23 @@
 	    }, {
 	        key: 'updateProgress',
 	        value: function updateProgress(progress) {
-	            console.log(progress + '%');
 	            this.setState({ progress: progress });
+	        }
+	    }, {
+	        key: 'renderProgress',
+	        value: function renderProgress() {
+	            if (this.state.progress) {
+	                return _react2.default.createElement('progress', { className: 'progress__bar', value: this.state.progress, max: '100' });
+	            }
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
-	                null,
+	                { className: 'progress' },
 	                this.renderPreview(),
-	                _react2.default.createElement('progress', { value: this.state.progress, max: '100' })
+	                this.renderProgress()
 	            );
 	        }
 	    }]);
@@ -20459,8 +20473,12 @@
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'pre',
-	                null,
-	                this.state.result
+	                { className: 'result' },
+	                _react2.default.createElement(
+	                    'code',
+	                    null,
+	                    this.state.result
+	                )
 	            );
 	        }
 	    }]);

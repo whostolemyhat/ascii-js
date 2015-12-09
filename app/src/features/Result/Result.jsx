@@ -17,6 +17,12 @@ export default class Result extends React.Component {
     }
 
     render() {
-        return <pre>{ this.state.result }</pre>
+        return (
+            <pre className="result">
+                <code>
+                    { this.state.result }
+                </code>
+            </pre>
+        );
     };
 }

@@ -5,23 +5,23 @@ module.exports = function(grunt) {
     var webpackConfig = require('./webpack.config');
 
     grunt.initConfig({
-        app: __dirname + '/public',
+        app: __dirname + '/app',
 
         webpack: {
             options: webpackConfig,
 
             app: {
-                entry: __dirname + '/src/boot.jsx',
+                entry: '<%= app %>/src/boot.jsx',
                 output: {
-                    path: __dirname + '/public/js',
+                    path: '<%= app %>/js',
                     filename: 'app.js'
                 }
             },
 
             worker: {
-                entry: __dirname + '/src/services/asciiWorker.js',
+                entry: '<%= app %>/src/services/asciiWorker.js',
                 output: {
-                    path: __dirname + '/public/js',
+                    path: '<%= app %>/js',
                     filename: 'asciiWorker.js'
                 }
             }
@@ -34,14 +34,14 @@ module.exports = function(grunt) {
                     lineNumbers: false
                 },
                 files: {
-                    '<%= app %>/css/main.css': 'sass/main.scss'
+                    '<%= app %>/css/main.css': '<%= app %>/sass/main.scss'
                 }
             }
         },
 
         eslint: {
             target: [
-                'src/**/*'
+                '<%= app %>/src/**/*'
             ]
         },
 
@@ -53,14 +53,14 @@ module.exports = function(grunt) {
 
             css: {
                 files: [
-                    'sass/**/*'
+                    '<%= app %>/sass/**/*'
                 ],
                 tasks: ['sass']
             },
 
             js: {
                 files: [
-                    'src/**/*.*'
+                    '<%= app %>/src/**/*.*'
                 ],
                 tasks: ['eslint', 'webpack']
             }
@@ -68,7 +68,7 @@ module.exports = function(grunt) {
 
         connect: {
             options: {
-                port: 3001,
+                port: 3000,
                 livereload: 35729,
                 hostname: 'localhost',
             },
@@ -80,5 +80,5 @@ module.exports = function(grunt) {
         },
     });
 
-    grunt.registerTask('default', ['sass', 'eslint', 'webpack', 'watch']);
+    grunt.registerTask('default', ['sass', 'eslint', 'webpack', 'connect', 'watch']);
 };

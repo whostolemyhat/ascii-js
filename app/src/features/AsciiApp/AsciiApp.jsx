@@ -7,11 +7,11 @@ export default class AsciiApp extends React.Component {
 
     render() {
         return (
-            <main role="main">
+            <div>
                 <UploadForm>Drop an image here</UploadForm>
                 <Progress />
                 <Result />
-            </main>
+            </div>
         );
     }
 }

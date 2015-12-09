@@ -15,6 +15,7 @@
     "express-handlebars": "^2.0.1",
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
+    "react-dom": "^0.14.3",
     "serve-favicon": "~2.3.0"
   },
   "description": "Convert images to ascii art (text art)",
