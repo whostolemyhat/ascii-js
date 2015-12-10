@@ -7,7 +7,7 @@ export default class AsciiApp extends React.Component {
     constructor() {
         super();
 
-        // use to conditionally render components
+        // use to conditionally render components 
         this.state = {
             upload: true,
             progress: false,
