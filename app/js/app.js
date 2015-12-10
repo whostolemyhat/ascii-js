@@ -19696,7 +19696,16 @@
 	    function AsciiApp() {
 	        _classCallCheck(this, AsciiApp);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(AsciiApp).apply(this, arguments));
+	        // use to conditionally render components
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AsciiApp).call(this));
+
+	        _this.state = {
+	            upload: true,
+	            progress: false,
+	            result: false
+	        };
+	        return _this;
 	    }
 
 	    _createClass(AsciiApp, [{
@@ -19708,7 +19717,7 @@
 	                _react2.default.createElement(
 	                    _UploadForm2.default,
 	                    null,
-	                    'Drop an image here'
+	                    'Drop an image here, or click to choose an image'
 	                ),
 	                _react2.default.createElement(_Progress2.default, null),
 	                _react2.default.createElement(_Result2.default, null)
@@ -19869,8 +19878,8 @@
 	                    onDragOver: this.onDragOver,
 	                    onDragLeave: this.onDragLeave },
 	                this.props.children,
-	                _react2.default.createElement('input', { type: 'file', ref: 'input', onChange: this.onDrop }),
-	                _react2.default.createElement('canvas', { ref: 'photo' })
+	                _react2.default.createElement('input', { type: 'file', ref: 'input', onChange: this.onDrop, className: 'input' }),
+	                _react2.default.createElement('canvas', { ref: 'photo', className: 'canvas' })
 	            );
 	        }
 	    }]);

@@ -1,18 +1,23 @@
 .upload {
-    background: grey;
+    background: #FCFF89;
     border-radius: 5px;
-    width: 50%;
+    width: 100%;
     min-height: 200px;
-
-    &--has-file {
-        background: antiquewhite;
-    }
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &--drag-enter {
-        background: aliceblue;
+        background: #FE7187
     }
 
-    canvas {
+    &--has-file {
+        background: #CA4B7C;
+    }
+
+    .input,
+    .canvas {
         display: none;
     }
 }

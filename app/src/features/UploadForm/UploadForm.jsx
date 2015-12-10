@@ -99,8 +99,8 @@ export default class UploadForm extends React.Component {
 
                 { this.props.children }
 
-                <input type="file" ref="input" onChange={ this.onDrop } />
-                <canvas ref="photo"></canvas>
+                <input type="file" ref="input" onChange={ this.onDrop } className="input" />
+                <canvas ref="photo" className="canvas"></canvas>
             </div>
         ); 
     };
