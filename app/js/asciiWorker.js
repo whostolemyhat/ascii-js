@@ -64,6 +64,7 @@
 
 	    var pixels = e.data[0];
 
+	    var resolution = 1;
 	    var PIXEL_LENGTH = 4;
 	    var imgWidth = pixels.width * PIXEL_LENGTH;
 	    var rowPercent = 100 / pixels.height;
@@ -72,7 +73,7 @@
 	    var dataLength = data.length;
 	    var out = '';
 
-	    for (var i = 0; i < dataLength; i += PIXEL_LENGTH) {
+	    for (var i = 0; i < dataLength; i += PIXEL_LENGTH * resolution) {
 	        var pixel = {};
 	        pixel.r = data[i];
 	        pixel.g = data[i + 1];
@@ -84,8 +85,11 @@
 
 	        if (i % imgWidth === 0 && i > 0) {
 	            out += '\r\n';
-	            postMessage({ type: 'progress', value: rowCount * rowPercent });
+	            postMessage({ type: 'progress', value: rowCount * rowPercent * resolution });
 	            rowCount++;
+
+	            // skip rows
+	            i += imgWidth * (resolution - 1);
 	        }
 	    }
 

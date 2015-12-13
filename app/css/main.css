@@ -54,4 +54,5 @@ progress::-moz-progress-bar {
   margin-right: 25px; }
 
 .result {
-  font-size: 10px; }
+  font-size: 4px;
+  line-height: 0.5; }

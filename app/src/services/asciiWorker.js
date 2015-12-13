@@ -16,6 +16,7 @@ onmessage = function(e) {
 
     const pixels = e.data[0];
 
+    const resolution = 1;
     const PIXEL_LENGTH = 4;
     const imgWidth = pixels.width * PIXEL_LENGTH;
     const rowPercent = 100 / pixels.height;
@@ -24,7 +25,8 @@ onmessage = function(e) {
     const dataLength = data.length;
     let out = '';
 
-    for(let i = 0; i < dataLength; i += PIXEL_LENGTH) {
+
+    for(let i = 0; i < dataLength; i += PIXEL_LENGTH * resolution) {
         const pixel = {};
         pixel.r = data[i];
         pixel.g = data[i + 1];
@@ -36,8 +38,11 @@ onmessage = function(e) {
 
         if(i % imgWidth === 0 && i > 0) {
             out += '\r\n';
-            postMessage({ type: 'progress', value: rowCount * rowPercent });
+            postMessage({ type: 'progress', value: (rowCount * rowPercent) * resolution });
             rowCount++;
+
+            // skip rows
+            i += imgWidth * (resolution - 1);
         }
     }
 
