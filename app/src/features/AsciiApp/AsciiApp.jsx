@@ -1,5 +1,6 @@
 import React from 'react';
 import UploadForm from 'UploadForm/UploadForm';
+import Options from 'Options/Options';
 import Progress from 'Progress/Progress';
 import Result from 'Result/Result';
 

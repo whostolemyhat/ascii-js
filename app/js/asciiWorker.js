@@ -48,45 +48,74 @@
 
 	console.log('worker script loaded');
 
-	function pixelToChar(pixel, mapLength) {
-	    var averageShade = Math.floor(pixel.r * 0.3 + pixel.b * 0.3 + pixel.g * 0.3);
-	    return Math.floor((255 - averageShade) * (mapLength / 256));
+	function getAverageShade(pixels) {
+	    var r = 0;
+	    var g = 0;
+	    var b = 0;
+
+	    var len = pixels.length;
+
+	    for (var i = 0; i < len; i++) {
+	        r += pixels[i].r * 0.3;
+	        g += pixels[i].g * 0.3;
+	        b += pixels[i].b * 0.3;
+	    }
+
+	    return Math.floor(r / len + b / len + g / len);
 	}
 
+	function getPixelData(row, i) {
+	    var pixel = {};
+	    pixel.r = row[i];
+	    pixel.g = row[i + 1];
+	    pixel.b = row[i + 2];
+	    pixel.a = row[i + 3];
+
+	    return pixel;
+	}
+
+	function pixelToChar(pixel, mapLength) {
+	    return Math.floor((255 - pixel) * (mapLength / 256));
+	}
+
+	// characters in order, representing light to dark
 	var charMap = [".", ",", ":", ";", "o", "x", "%", "#", "@"];
 
 	onmessage = function (e) {
 	    console.log('message received');
 	    console.log(e.data);
-	    console.log('posting');
-
-	    postMessage('hello');
 
 	    var pixels = e.data[0];
+	    var options = e.data[1];
 
+	    var resolution = options.resolution || 1;
 	    var PIXEL_LENGTH = 4;
-	    var imgWidth = pixels.width * PIXEL_LENGTH;
-	    var rowPercent = 100 / pixels.height;
+
+	    var rowPercent = 100 / options.height;
 	    var rowCount = 0;
-	    var data = pixels.data;
-	    var dataLength = data.length;
+	    var rows = pixels;
 	    var out = '';
 
-	    for (var i = 0; i < dataLength; i += PIXEL_LENGTH) {
-	        var pixel = {};
-	        pixel.r = data[i];
-	        pixel.g = data[i + 1];
-	        pixel.b = data[i + 2];
-	        pixel.a = data[i + 3];
+	    for (var y = 0; y < rows.length; y += resolution) {
+	        var row = rows[y];
+	        for (var i = 0; i < row.length; i += PIXEL_LENGTH * resolution) {
+	            var _pixels = [];
 
-	        var char = charMap[pixelToChar(pixel, charMap.length)];
-	        out += char;
+	            for (var j = 0; j < resolution; j += PIXEL_LENGTH) {
+	                _pixels.push(getPixelData(row, i));
+	                _pixels.push(getPixelData(row, i + j));
+	                _pixels.push(getPixelData(rows[y + j], i));
+	                _pixels.push(getPixelData(rows[y + j], i + j));
+	            }
 
-	        if (i % imgWidth === 0 && i > 0) {
-	            out += '\r\n';
-	            postMessage({ type: 'progress', value: rowCount * rowPercent });
-	            rowCount++;
+	            var averagePixel = getAverageShade(_pixels);
+	            var char = charMap[pixelToChar(averagePixel, charMap.length)];
+	            out += char;
 	        }
+
+	        out += '\r\n';
+	        postMessage({ type: 'progress', value: rowCount * rowPercent * resolution });
+	        rowCount++;
 	    }
 
 	    // return out;

@@ -12,10 +12,12 @@ export default class AsciiConverter extends EventEmitter {
         return Math.floor((255 - averageShade) * (mapLength / 256));
     }
 
-    toAscii(pixels) {
+    toAscii(pixels, options) {
+        console.log(pixels);
+        
         const worker = new Worker('/js/asciiWorker.js');
 
-        worker.postMessage([pixels]);
+        worker.postMessage([pixels, options]);
         worker.onmessage = e => {
             console.log('Message from worker');
             console.log(e);

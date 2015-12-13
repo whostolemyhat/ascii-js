@@ -77,8 +77,23 @@ export default class UploadForm extends React.Component {
         canvas.height = image.height;
         const context = canvas.getContext('2d');
         context.drawImage(image, 0, 0);
+        
+        const data = context.getImageData(0, 0, canvas.height, canvas.width);
+        let i = 0;
+        const rows = [];
+        const options = {
+            height: data.height,
+            width: data.width,
+            resolution: 1,
+            aggregate: true
+        };
+        const PIXEL_LENGTH = 4;
 
-        core.ascii.toAscii(context.getImageData(0, 0, canvas.height, canvas.width));
+        while(i < data.data.length) {
+            rows.push(data.data.slice(i, i += image.width * PIXEL_LENGTH));
+        }
+
+        core.ascii.toAscii(rows, options);
     }
 
     render() {
